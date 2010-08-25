@@ -5,7 +5,7 @@
 
 	jmp 0x07c0:start
 
-%include "coroutine.inc"
+%include "common.inc"
 
 start:
 	; セグメントレジスタの初期化

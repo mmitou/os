@@ -2,7 +2,7 @@
 [bits 16]
 	jmp short start
 
-%include "coroutine.inc"
+%include "common.inc"
 
 start:
 	mov ax, cs
@@ -13,6 +13,10 @@ start:
 
 	mov si, kmsg
 	call print
+
+	mov ax, 0x0013
+	int 0x10
+
 
 	; AT互換機はCLIを呼ぶ前にこれをやらないといけないらしい
 	; と、30日でOS作る本に書いてあった

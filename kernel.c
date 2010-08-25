@@ -1,6 +1,9 @@
 
+
+
+extern void halt();
+
 void kernel_start()
 {
- loop:
-  goto loop;
+   halt();
 }
