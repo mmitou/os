@@ -1,32 +1,32 @@
 
+C_SRCS = kernel.c textmode_graphic.c 
+AS_SRCS = basic_io.nasm
+
+BOOTLOADERS = boot.nasm loader.nasm
+
 all: a.img
 
-a.img: boot.img loader.img kernel.img
+a.img: $(subst .nasm,.img,$(BOOTLOADERS)) kernel.img
 	cat $^ > $@
 
-boot.img: boot.nasm
-	nasm $^ -f bin -o $@
-
-loader.img: loader.nasm
-	nasm $^ -f bin -o $@
-
-kernel.img: kernel.o basic_io.o textmode_graphic.o
+kernel.img: $(subst .c,.o,$(C_SRCS)) $(subst .nasm,.o,$(AS_SRCS))
 	gcc $^ -o $@ -Wall -nostdlib -Wl,-T lnk.ls
 
-basic_io.o: basic_io.nasm 
+%.img : %.nasm
+	nasm $^ -f bin -o $@
+
+%.o : %.nasm
 	nasm basic_io.nasm -f elf -o $@
 
-graphic.o: graphic.c
+%.o : %.c
 	gcc $^ -c -o $@ -Wall -nostdlib
 
-textmdoe_graphic.o: textmdoe_graphic.c
-	gcc $^ -c -o $@ -Wall -nostdlib
-
-kernel.o: kernel.c 
-	gcc $^ -c -o $@ -Wall -nostdlib
-
+.PHONY: clean
 clean:
-	rm *.img *~ *.o
+	find ./ -name "*.o" -exec rm {} \;
+	find ./ -name "*~" -exec rm {} \;
+	find ./ -name "*.img" -exec rm {} \;
 
+.PHONY: run
 run:
 	qemu -fda a.img -boot a -m 512
