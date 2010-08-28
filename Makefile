@@ -10,13 +10,19 @@ boot.img: boot.nasm
 loader.img: loader.nasm
 	nasm $^ -f bin -o $@
 
-kernel.img: kernel.o basic_order.o lnk.ls
-	gcc kernel.o basic_order.o -o $@ -Wall -nostdlib -Wl,-T lnk.ls
+kernel.img: kernel.o basic_io.o textmode_graphic.o
+	gcc $^ -o $@ -Wall -nostdlib -Wl,-T lnk.ls
 
-basic_order.o: basic_order.nasm
-	nasm $^ -f elf -o $@
+basic_io.o: basic_io.nasm 
+	nasm basic_io.nasm -f elf -o $@
 
-kernel.o: kernel.c
+graphic.o: graphic.c
+	gcc $^ -c -o $@ -Wall -nostdlib
+
+textmdoe_graphic.o: textmdoe_graphic.c
+	gcc $^ -c -o $@ -Wall -nostdlib
+
+kernel.o: kernel.c 
 	gcc $^ -c -o $@ -Wall -nostdlib
 
 clean:

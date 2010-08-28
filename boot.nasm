@@ -51,12 +51,13 @@ loopHead:
 	jb loopHead
 	mov cl, 1
 	
-	; 必要になるまでコピーしない
-	;inc dh
-	;cmp dh, 2	; ヘッドは0 or 1なので
-	;jb loopHead
-	;mov dh, 0
 
+	inc dh
+	cmp dh, 2	; ヘッドは0 or 1なので
+	jb loopHead
+	mov dh, 0
+
+	; 必要になるまでコピーしない
 	;inc ch
 	;cmp ch, 80	; シリンダは各面に0~79番まである
 	;jb loopHead

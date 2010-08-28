@@ -14,9 +14,9 @@ start:
 	mov si, kmsg
 	call print
 
-	mov ax, 0x0013
-	int 0x10
-
+	; VGA mode
+	; mov ax, 0x0013
+	; int 0x10
 
 	; AT互換機はCLIを呼ぶ前にこれをやらないといけないらしい
 	; と、30日でOS作る本に書いてあった
@@ -31,6 +31,8 @@ start:
 
 	; A20ラインを有効にする
 	call enableA20
+
+	sti
 
 	; GDT を登録する
 	lgdt [gdtr]
@@ -48,7 +50,7 @@ start:
 
 pipeFlush:
 	; セグメント間ジャンプでCSレジスタにGDTのセレクタ値を設定する
-	jmp dword codeSgmntSlctr:prtctModeBegin
+	jmp dword codeSgmntSlctr:(0x10000 + prtctModeBegin)
 
 prtctModeBegin:
 [bits 32]
@@ -72,8 +74,6 @@ kernelCopy:
 	jbe kernelCopy
 
 	jmp dword codeSgmntSlctr:kernelTo
-
-
 
 [bits 16]
 ;<defun enableA20>
@@ -129,20 +129,21 @@ gdt:
 codeSgmntSlctr equ 0x08
 	dw 0xffff   ; リミット 0xffff
 	dw 0x0	    ; baseaddress 0~15
-	db 0x01	    ; baseaddress 16~23
+	db 0x0	    ; baseaddress 16~23
 	db 0x9a	    ; P:1 DPL:0 S:1 TYPE:10 Code non-conforming readable
 	db 0xcf	    ; G:1, D:1, limit 16~19: 0xf
 	db 0x0	    ; baseaddress 24~31: 0x0
-	; base = 0x00010000
+	; base = 0x00000000
 
 dataSgmntSlctr equ 0x10
 	dw 0xffff   ; リミット 0xffff
 	dw 0x0	    ; baseaddress 0~15
-	db 0x01	    ; baseaddress 16~23
+	db 0x0	    ; baseaddress 16~23
 	db 0x92	    ; P:1 DPL:0 S:1 TYPE: Data, expand-up, writable
 	db 0xcf	    ; G:1 D:1 limit 16~19: 0xf
 	db 0x0	    ; baseaddress 24~31: 0x0
-	; base = 0x00010000
+	; base = 0x00000000
+
 gdtEnd:
 
 times 512 - ($ -$$) db 0
