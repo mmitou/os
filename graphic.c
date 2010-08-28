@@ -1,0 +1,76 @@
+
+#include "graphic.h"
+#include "basic_io.h"
+
+int xsize = 320;
+int ysize = 200;
+char *vram = (char*)0xa0000;
+
+const unsigned char table_rgb[] = 
+{
+   0x00, 0x00, 0x00, 
+   0xff, 0x00, 0x00,
+   0x00, 0xff, 0x00,
+   0xff, 0xff, 0x00,
+   0x00, 0x00, 0xff,
+   0xff, 0x00, 0xff,
+   0xff, 0xff, 0xff,
+   0xff, 0xff, 0xff,
+   0xc6, 0xc6, 0xc6,
+   0x84, 0x00, 0x00,
+   0x00, 0x84, 0x00,
+   0x84, 0x84, 0x00,
+   0x00, 0x00, 0x84,
+   0x84, 0x00, 0x84,
+   0x00, 0x84, 0x84,
+   0x84, 0x84, 0x84
+};
+
+enum font_index
+{
+   A = 0
+};
+
+const char font[][16] =
+{
+   {0x00, 0x18, 0x18, 0x18, 0x18, 0x24, 0x24, 0x24,
+    0x24, 0x7e, 0x42, 0x42, 0x42, 0xe7, 0x00, 0x00}
+};
+
+void putfont(int x, int y, 
+
+
+void set_palette(void)
+{
+   int i; 
+   io_out16(0x03c8, 0);
+   for(i = 0; i < sizeof(table_rgb)/sizeof(unsigned char); ++i)
+   {
+      io_out16(0x03c9, table_rgb[i]);
+   }
+}
+
+void init_palette(void)
+{
+
+   int eflags = io_load_eflags();
+   io_cli();
+   set_palette();
+   io_store_eflags(eflags);
+   return ;
+}
+
+void boxfill(
+   const int strtx, const int strty,
+   const int endx, const int endy, const char c_index)
+{
+   int x,y;
+
+   for(y = strty; y < endy; ++y)
+   {
+      for(x = strtx; x < endx; ++x)
+      {
+         vram[y * xsize + x] = c_index;
+      }
+   }
+} 
