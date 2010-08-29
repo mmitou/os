@@ -7,7 +7,7 @@ enum TextModeColor
    RED, PURPLE, BRAWN, WHITE
 };
 
-enum TextModeNum
+enum TextModeDefine
 {
    X_MAX = 79,
    Y_MAX = 24

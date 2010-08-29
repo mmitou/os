@@ -12,6 +12,7 @@ segment .text
 [global io_out16]
 [global io_load_eflags]
 [global io_store_eflags]
+[global io_lgdt]
 
 io_cli:
 	cli
@@ -60,3 +61,14 @@ io_store_eflags:
 	popfd
 	ret
 	
+io_lgdt: ;void lgdt(ulong limit, ulong addr)
+	mov ax, [esp + 4] ; limit
+	mov [esp + 6], ax
+	lgdt [esp + 6]
+	ret
+
+io_idrt: ; void idrt(ulong limit, ulong addr)
+	mov ax, [esp + 4] ; limit
+	mov [esp + 6], ax
+	lidt [esp + 6]
+	ret

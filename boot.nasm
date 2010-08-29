@@ -50,17 +50,15 @@ loopHead:
 	cmp cl, 19	; セクターが1~18番まで
 	jb loopHead
 	mov cl, 1
-	
 
 	inc dh
 	cmp dh, 2	; ヘッドは0 or 1なので
 	jb loopHead
 	mov dh, 0
 
-	; 必要になるまでコピーしない
-	;inc ch
-	;cmp ch, 80	; シリンダは各面に0~79番まである
-	;jb loopHead
+	inc ch
+	cmp ch, 10	; シリンダは各面に0~79番まである...
+	jb loopHead
 	
 loopEnd:
 	
