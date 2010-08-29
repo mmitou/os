@@ -1,0 +1,13 @@
+
+mmitou wrote
+
+mail: mitou.interface@gmail.com
+twitter id: mmitou
+
+need gcc, nasm, qemu
+
+compile:
+make all
+
+execute:
+make run

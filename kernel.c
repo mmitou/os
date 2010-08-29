@@ -4,9 +4,7 @@
 #include "gdt.h"
 #include "textmode_graphic.h"
 
-
 void init_graphic(void);
-
 
 void kernel_start()
 {
