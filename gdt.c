@@ -1,6 +1,7 @@
 
 #include "gdt.h"
 #include "basic_io.h"
+#include "kstring.h"
 
 void set_segmentdescripter(
    SegmentDescripter* s, 
@@ -33,14 +34,8 @@ void set_segmentdescripter(
 void init_gdt(void)
 {
    SegmentDescripter *s = (SegmentDescripter *)GDT_HEAD_ADDR;
-   unsigned char *p;
-   int i; 
-   
-   for(i = 0, p = (unsigned char *)s;
-       i < GDT_SIZE; ++i)
-   {
-      p[i] = 0x0;
-   }
+
+   memset(s, 0, GDT_SIZE);
 
    s++;
 

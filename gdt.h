@@ -63,19 +63,12 @@ enum GDTParams
    GDT_SIZE = 0x10000
 };
 
-typedef struct GDTR
-{
-      unsigned short limit;
-      unsigned long base;
-} GDTR;
 
 void set_segmentdescripter(
    SegmentDescripter* s, 
    const unsigned long limit, const unsigned long baseaddr,
    const DescripterType type, const unsigned long dpl,
    const PhysicalMemoryStatus p, const LimitStatus g);
-
-void load_gdtr(unsigned short limit, unsigned long base);
 
 void init_gdt(void);
 #endif

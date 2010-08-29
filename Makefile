@@ -1,5 +1,8 @@
 
-C_SRCS = kernel.c textmode_graphic.c interrupt.c gdt.c
+C_SRCS = \
+kernel.c textmode_graphic.c idt.c gdt.c \
+kstring.c
+
 AS_SRCS = basic_io.nasm
 
 BOOTLOADERS = boot.nasm loader.nasm

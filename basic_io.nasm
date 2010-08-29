@@ -13,6 +13,7 @@ segment .text
 [global io_load_eflags]
 [global io_store_eflags]
 [global io_lgdt]
+[global io_lidt]
 
 io_cli:
 	cli
@@ -67,7 +68,7 @@ io_lgdt: ;void lgdt(ulong limit, ulong addr)
 	lgdt [esp + 6]
 	ret
 
-io_idrt: ; void idrt(ulong limit, ulong addr)
+io_lidt: ; void idrt(ulong limit, ulong addr)
 	mov ax, [esp + 4] ; limit
 	mov [esp + 6], ax
 	lidt [esp + 6]
