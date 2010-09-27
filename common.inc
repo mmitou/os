@@ -1,7 +1,7 @@
 loaderHead equ 0x1000
 kernelFrom equ 0x10200	; base address との差分
 kernelTo   equ 0x100000	; base address との差分
-kernelSize equ 0x2800
+kernelSize equ 0x4800
 
 ; DS:SI の文字列を出力する
 

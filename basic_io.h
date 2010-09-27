@@ -12,6 +12,8 @@ extern unsigned long io_load_eflags(void);
 extern void io_store_eflags(unsigned long);
 extern void io_lgdt(unsigned long limit, unsigned long addr);
 extern void io_lidt(unsigned long limit, unsigned long addr);
-
+extern void asm_handler20(void);
+extern void asm_handler21(void);
+extern void asm_handler2c(void);
 
 #endif

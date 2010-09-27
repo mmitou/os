@@ -3,7 +3,7 @@
 
 #include "gdt.h"
 
-typedef struct InterruptDescripter
+typedef struct GateDescripter
 {
       unsigned short handler_low;
       unsigned short codesegment;
@@ -14,15 +14,17 @@ typedef struct InterruptDescripter
       unsigned char dpl : 2;   /* DescripterPrivilegeLevel */
       unsigned char p : 1;     /* PhysicalMemoryStatus */
       unsigned char handler_high;
-} InterruptDescripter;
+} GateDescripter;
 
-void set_interruptdescripter(
-   InterruptDescripter *i,
-   const unsigned long handleraddr,
+void set_gatedescripter(
+   GateDescripter *i,
+   const void *handleraddr,
    const unsigned short cs_selector,
    const unsigned char dpl,
    const PhysicalMemoryStatus p);
 
 void init_idt(void);
+
+void init_pic(void);
 
 #endif

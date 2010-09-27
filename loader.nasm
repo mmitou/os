@@ -21,10 +21,10 @@ start:
 	; AT互換機はCLIを呼ぶ前にこれをやらないといけないらしい
 	; と、30日でOS作る本に書いてあった
 
-	mov al, 0xff
-	out 0x21, al
-	nop
-	out 0xa1, al
+	;mov al, 0xff
+	;out 0x21, al
+	;nop
+	;out 0xa1, al
 
 	; PIC の割り込みを無効化する
 	cli
@@ -32,10 +32,12 @@ start:
 	; A20ラインを有効にする
 	call enableA20
 
-	sti
+	;sti
 
 	; GDT を登録する
 	lgdt [gdtr]
+
+
 
 	; IDT を登録する
 	lidt [idtr]
@@ -62,6 +64,8 @@ prtctModeBegin:
 	mov ss, bx
 
 	mov esi, 0x0
+
+
 kernelCopy:
 	mov eax, kernelFrom
 	add eax, esi

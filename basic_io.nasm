@@ -14,6 +14,13 @@ segment .text
 [global io_store_eflags]
 [global io_lgdt]
 [global io_lidt]
+[global asm_handler20]
+[global asm_handler21]
+[global asm_handler2c]
+
+[extern interrupthandler20]
+[extern interrupthandler21]
+[extern interrupthandler2c]
 
 io_cli:
 	cli
@@ -73,3 +80,68 @@ io_lidt: ; void idrt(ulong limit, ulong addr)
 	mov [esp + 6], ax
 	lidt [esp + 6]
 	ret
+
+
+
+asm_handler20:
+	push es
+	push ds
+	pushad
+
+	mov eax, esp
+
+	push eax
+	mov ax, ss
+	mov ds, ax
+	mov es, ax
+
+	call interrupthandler20
+
+	pop eax
+	popad
+	pop ds
+	pop es
+	iretd
+
+
+asm_handler21:
+	push es
+	push ds
+	pushad
+
+	mov eax, esp
+
+	push eax
+	mov ax, ss
+	mov ds, ax
+	mov es, ax
+
+	call interrupthandler21
+
+	pop eax
+	popad
+	pop ds
+	pop es
+	iretd
+
+asm_handler2c:
+	push es
+	push ds
+	pushad
+
+	mov eax, esp
+
+	push eax
+
+	mov ax, ss
+	mov ds, ax
+	mov es, ax
+
+	call interrupthandler2c
+
+	pop eax
+	popad
+	pop ds
+	pop es
+	iretd
+	

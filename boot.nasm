@@ -61,7 +61,6 @@ loopHead:
 	jb loopHead
 	
 loopEnd:
-	
 	jmp loaderHead:0
 	
 
