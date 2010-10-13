@@ -32,7 +32,7 @@ start:
 	; A20ラインを有効にする
 	call enableA20
 
-	;sti
+	sti
 
 	; GDT を登録する
 	lgdt [gdtr]

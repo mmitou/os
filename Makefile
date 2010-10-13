@@ -7,13 +7,16 @@ AS_SRCS = basic_io.nasm
 
 BOOTLOADERS = boot.nasm loader.nasm
 
+K_OPTION = -ffreestanding -fno-common -fno-builtin \
+	-fomit-frame-pointer -nostdlib
+
 all: a.img
 
 a.img: $(subst .nasm,.img,$(BOOTLOADERS)) kernel.img
 	cat $^ > $@
 
 kernel.img: $(subst .c,.o,$(C_SRCS)) $(subst .nasm,.o,$(AS_SRCS))
-	gcc $^ -o $@ -Wall -nostdlib -Wl,-T lnk.ls
+	gcc $^ -o $@ -Wall $(K_OPTION) -O2 -Wl,-T lnk.ls
 
 %.img : %.nasm
 	nasm $^ -f bin -o $@

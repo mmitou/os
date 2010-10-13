@@ -10,13 +10,12 @@ void kernel_start()
 {
 
    init_pic();
-/*
-   io_cli();
+
    init_gdt();
    init_idt();
-   io_sti();
-*/
+
    init_graphic();
+
 
    while(1);
    halt();
