@@ -27,16 +27,15 @@ start:
 	;out 0xa1, al
 
 	; PIC の割り込みを無効化する
+	; カーネル内で割り込み設定をした後で改めて有効にする
 	cli
 
 	; A20ラインを有効にする
 	call enableA20
 
-	sti
 
 	; GDT を登録する
 	lgdt [gdtr]
-
 
 
 	; IDT を登録する

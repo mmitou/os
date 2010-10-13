@@ -130,7 +130,6 @@ asm_handler2c:
 	pushad
 
 	mov eax, esp
-
 	push eax
 
 	mov ax, ss

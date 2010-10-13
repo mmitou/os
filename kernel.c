@@ -8,17 +8,17 @@ void init_graphic(void);
 
 void kernel_start()
 {
-
    init_pic();
-
    init_gdt();
    init_idt();
-
    init_graphic();
 
+   io_sti();
 
    while(1);
    halt();
+
+
 }
 
 void init_graphic(void)
