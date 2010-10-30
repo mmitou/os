@@ -21,16 +21,16 @@ typedef struct TextModeChar
 } TextModeChar;
 
 
-void tmode_putchar(
+void textmode_putchar(
    const char c, const unsigned char cclr, const unsigned char bclr, 
    const unsigned int x, const unsigned int y);
 
-void tmode_boxfill(
+void textmode_boxfill(
    const unsigned int bclr,
    const unsigned int begin_x, const unsigned int begin_y,
    const unsigned int end_x, const unsigned int end_y);
 
-void tmode_puts(
+void textmode_puts(
    char *s, const unsigned char cclr, const unsigned char bclr, 
    const unsigned int x, const unsigned int y);
 

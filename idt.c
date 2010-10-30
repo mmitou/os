@@ -17,41 +17,47 @@ enum PICParmas
    PIC0_ICW2 = 0x0021, 
    PIC0_ICW3 = 0x0021,
    PIC0_ICW4 = 0x0021,
-
+   PIC0_OCW1 = 0x0021, /* Operation Control Word */
+   PIC0_OCW2 = 0x0020,
+   PIC0_OCW3 = 0x0020,
+   
    PIC1_IMR = 0x00a1,  /* PIC1 InterruptMaskRegister */
    PIC1_ICW1 = 0x00a0, /* Initial Control Word */
    PIC1_ICW2 = 0x00a1, 
    PIC1_ICW3 = 0x00a1,
-   PIC1_ICW4 = 0x00a1
+   PIC1_ICW4 = 0x00a1,
+   PIC1_OCW1 = 0x00a1, /* Operation Control Word */
+   PIC1_OCW2 = 0x00a0,
+   PIC1_OCW3 = 0x00a0
+
 };
 
 void init_idt(void)
 {
    GateDescripter *i = (GateDescripter *)IDT_HEAD_ADDR;
    int j;
+
    memset(i, 0, IDT_SIZE);
 
-/*
-   set_gatedescripter(
-      i+0x20, asm_handler20, 2 * 8,
-      0, ON_PHYS_MEMORY);
-
-   set_gatedescripter(
-      i+0x21, asm_handler21, 2 * 8,
-      0, ON_PHYS_MEMORY);
-
-   set_gatedescripter(
-      i+0x2c, asm_handler2c, 2 * 8,
-      0, ON_PHYS_MEMORY);
-   
-*/
 
    for( j = 0; j< 256; ++j)
    {
       set_gatedescripter(
-         i+j, asm_handler2c, 1 * 8,
+         i+j, asm_handlerDummy, 1 * 8,
          0, ON_PHYS_MEMORY);
    }
+
+   set_gatedescripter(
+      i + 0x20, asm_handler20, 1 * 8,
+      0, ON_PHYS_MEMORY);
+
+   set_gatedescripter(
+      i + 0x21, asm_handler21, 1 * 8,
+      0, ON_PHYS_MEMORY);
+
+   set_gatedescripter(
+      i + 0x2c, asm_handler2c, 1 * 8,
+      0, ON_PHYS_MEMORY);
 
    io_lidt(IDT_SIZE -1, IDT_HEAD_ADDR);
 }
@@ -62,17 +68,17 @@ void init_pic(void)
    io_out8(PIC1_IMR, 0xff); /* mask all interrupt */
 
    io_out8(PIC0_ICW1, 0x11); /* edge trigger mode */
-   io_out8(PIC0_ICW2, 0x20); // IRQ0-7 receive at INT 20-27
-   io_out8(PIC0_ICW3, 0x04); // PIC1 conneted IRQ2 
-   io_out8(PIC0_ICW4, 0x01); // non buffer mode 
+   io_out8(PIC0_ICW2, 0x20); /* IRQ0-7 receive at INT 20-27 */
+   io_out8(PIC0_ICW3, 0x04); /* PIC1 conneted IRQ2 */
+   io_out8(PIC0_ICW4, 0x01); /* non buffer mode */
 
    io_out8(PIC1_ICW1, 0x11); /* edge trigger mode */
    io_out8(PIC1_ICW2, 0x28); /* IRQ8-15 receive at INT 28-2f */
    io_out8(PIC1_ICW3, 0x02); /* PIC1 conneted IRQ2 */
    io_out8(PIC1_ICW4, 0x01); /* non buffer mode */
    
-   // io_out8(PIC0_IMR, 0xf8); /* PIC1 accept */
-   // io_out8(PIC1_IMR, 0xff); /* mask all interrupt */
+   io_out8(PIC0_IMR, 0xfc); /* PIC1 accept */
+   io_out8(PIC1_IMR, 0xff); /* mask all interrupt */
 
    //io_out8(PIC0_IMR, 0x00); 
    //io_out8(PIC1_IMR, 0x00);
@@ -100,18 +106,44 @@ void set_gatedescripter(
 
 void interrupthandler20(int *esp)
 {
-   tmode_puts("20", WHITE, BLACK, 0, 3);
-   while(1);
+   static int x =0;
+   char buf[20];
+   int_to_string(x, 10, buf);
+   textmode_puts(buf, WHITE, BLACK, 10, 3);
+   ++x;
+   io_out8(PIC0_OCW2, 0x0 + 0x60);
 }
 
 void interrupthandler21(int *esp)
 {
-   tmode_puts("21", WHITE, BLACK, 0, 1);
-   while(1);
+   int x =0;
+   char buf[20];
+   x = io_in8(0x0060);
+   int_to_string(x, 10, buf);
+   textmode_puts(buf, WHITE, BLACK, 10, 2);
+   io_out8(PIC0_OCW2, 0x01 + 0x60);
 }
 
 void interrupthandler2c(int *esp)
 {
-   tmode_puts("2c", WHITE, BLACK, 10, 1);
-   while(1);
+   static int x = 1;
+   
+   textmode_puts("2c", WHITE, BLACK, 10, x);
+   ++x;
+   io_out8(PIC0_OCW2, 0xc + 0x60);
+   /*while(1);*/
+}
+
+void interrupthandlerDummy(int *esp)
+{
+   static int x = 0;
+   if((x%2) == 0)
+   {
+      textmode_puts("Dummy is  0", WHITE, BLACK, 10, 3);
+   }
+   if((x%2) != 0)
+   {
+      textmode_puts("Dummy not 0", WHITE, BLACK, 10, 3);
+   }
+   x++;
 }

@@ -17,10 +17,12 @@ segment .text
 [global asm_handler20]
 [global asm_handler21]
 [global asm_handler2c]
+[global asm_handlerDummy]
 
 [extern interrupthandler20]
 [extern interrupthandler21]
 [extern interrupthandler2c]
+[extern interrupthandlerDummy]
 
 io_cli:
 	cli
@@ -144,3 +146,22 @@ asm_handler2c:
 	pop es
 	iretd
 	
+asm_handlerDummy:
+	push es
+	push ds
+	pushad
+
+	mov eax, esp
+
+	push eax
+	mov ax, ss
+	mov ds, ax
+	mov es, ax
+
+	call interrupthandlerDummy
+
+	pop eax
+	popad
+	pop ds
+	pop es
+	iretd

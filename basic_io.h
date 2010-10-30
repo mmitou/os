@@ -15,5 +15,6 @@ extern void io_lidt(unsigned long limit, unsigned long addr);
 extern void asm_handler20(void);
 extern void asm_handler21(void);
 extern void asm_handler2c(void);
+extern void asm_handlerDummy(void);
 
 #endif
