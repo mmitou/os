@@ -1,5 +1,13 @@
 #include "kstring.h"
 
+const char const num_char_table[] = 
+{ 
+   '0','1','2','3','4','5','6','7',
+   '8','9','a','b','c','d','e','f',
+};
+
+
+
 void *memset(void *p, int c, unsigned long size)
 {
    unsigned char *q = (unsigned char *)p;
@@ -53,22 +61,7 @@ int int_to_string(int x, int num, char *result)
 
 char int_to_char(int x)
 {
-   char result;
-   switch(x)
-   {
-      case 0: result = '0'; break;
-      case 1: result = '1'; break;
-      case 2: result = '2'; break;
-      case 3: result = '3'; break;
-      case 4: result = '4'; break;
-      case 5: result = '5'; break;
-      case 6: result = '6'; break;
-      case 7: result = '7'; break;
-      case 8: result = '8'; break;
-      case 9: result = '9'; break;
-      default: result = 'x'; break;
-   }
-   return result;
+   return num_char_table[x];
 }
 
 int reverse_string(char *s, int begin, int end)
@@ -82,3 +75,4 @@ int reverse_string(char *s, int begin, int end)
    }
    return 1;
 }
+

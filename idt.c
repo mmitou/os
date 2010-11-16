@@ -119,7 +119,7 @@ void interrupthandler21(int *esp)
    int x =0;
    char buf[20];
    x = io_in8(0x0060);
-   int_to_string(x, 10, buf);
+   int_to_string(x, 16, buf);
    textmode_puts(buf, WHITE, BLACK, 10, 2);
    io_out8(PIC0_OCW2, 0x01 + 0x60);
 }
